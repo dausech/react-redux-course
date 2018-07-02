@@ -4,7 +4,7 @@ npm-debug.log
 
 # misc
 .DS_Store
-*.env.*
+*.env*
 
 # IntelliJ
 *.iml
