@@ -1,42 +1,39 @@
-var path = require('path')
-//var webpack = require('webpack')
-var Dotenv = require('dotenv-webpack')
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+
+const htmlWebpackPlugin = new HtmlWebPackPlugin({
+  template: "./src/index.html",
+  filename: "./index.html"
+});
 
 module.exports = {
-  entry: ['./src/index.js'],
-  output: {
-    path: __dirname,
-    publicPath: '/',
-    filename: 'bundle.js'
-  },
   module: {
-    loaders: [
+    rules: [
       {
+        test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015', 'stage-1']
+        use: {
+          loader: "babel-loader"
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: "[name]_[local]_[hash:base64]",
+              sourceMap: true,
+              minimize: true
+            }
+          }
+        ]
       }
     ]
   },
-  resolve: {
-    extensions: [ '.js', '.jsx']
-  },
-  plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, './.env.test'),
-      systemvars: true
-      //path: './.env', // Path to .env file (this is the default)
-      //safe: false // load .env.example (defaults to "false" which does not use dotenv-safe)
-    })
-  ],
-  devServer: {
-    historyApiFallback: true,
-    contentBase: './',
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000
-    }
-  }
+  plugins: [htmlWebpackPlugin]
 };
